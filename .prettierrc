@@ -1,0 +1,13 @@
+trailingComma: es5
+tabWidth: 2
+arrowParens: always
+bracketSpacing: true
+endOfLine: lf
+htmlWhitespaceSensitivity: css
+jsxBracketSameLine: false
+jsxSingleQuote: false
+printWidth: 120
+proseWrap: preserve
+semi: true
+singleQuote: true
+useTabs: true
