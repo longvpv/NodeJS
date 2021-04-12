@@ -1,6 +1,6 @@
 const fs = require('fs');
-const moment = require('moment');
-
+const { formatDistanceToNow, subDays } = require('date-fns');
+const vi = require('date-fns/locale/vi');
 let productList = [];
 fs.readFile('./products.json', 'utf8', (err, data) => {
 	if (err) {
@@ -8,18 +8,19 @@ fs.readFile('./products.json', 'utf8', (err, data) => {
 		return;
 	}
 	if (data) {
-		productList = data;
+		jsonData = JSON.parse(data);
+		productList = jsonData.map((item) => {
+			let date = new Date(item.dateUpdated);
+			return {
+				...item,
+				dateUpdated: date,
+			};
+		});
+		console.log('Total product:', productList.length);
+		productList.forEach((product) => {
+			let priceFormatted = new Intl.NumberFormat().format(product.price);
+			let fromDay = formatDistanceToNow(subDays(product.dateUpdated, 3), { locale: vi });
+			console.log(`${product.id} - ${product.name} - ${priceFormatted} VNĐ - Cập nhật cách đây ${fromDay}`);
+		});
 	}
-	// console.log(productList);
-	console.log('This is date', moment('Mon Jan 01 2018 00:00:00 GMT+0100 (CET)'));
-	// if (productList.length >= 1) {
-	// 	const result = productList.map((product) => {
-	// 		let newDate = moment(product.dateUpdated).format('MM/DD/YYYY');
-	// 		return {
-	// 			dateUpdated: newDate,
-	// 			...product,
-	// 		};
-	// 	});
-	// 	console.log(result);
-	// }
 });
