@@ -17,15 +17,22 @@
 // });
 // ==============================================================
 
-const request = require('request');
-request(
-	{
-		url: 'https://tuoitre.vn',
-		gzip: true,
-	},
-	(error, response, body) => {
-		console.log('error:', error);
-		console.log('statusCode:', response && response.statusCode);
-		console.log('body:', body);
-	}
-);
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+	res.send('Hello World!');
+});
+
+app.post('/', function (req, res) {
+	res.send('Got a POST request');
+});
+
+app.put('/user', function (req, res) {
+	res.send('Got a PUT request at /user');
+});
+
+app.listen(port, () => {
+	console.log(`Example app listening at http://localhost:${port}`);
+});
