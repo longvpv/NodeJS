@@ -14,33 +14,14 @@ router.get('/admin', function (req, res) {
 		users: 10,
 		categories: 4,
 	};
-	fs.readFile('./product.json', 'utf8', (err, data) => {
-		if (err) {
-			console.error(err);
-			return;
-		}
-		total.products = JSON.parse(data).pagination.total;
-	});
-	fs.readFile('./categories.json', 'utf8', (err, data) => {
-		if (err) {
-			console.error(err);
-			return;
-		}
-		total.categories = JSON.parse(data).pagination.total;
-	});
-	fs.readFile('./users.json', 'utf8', (err, data) => {
-		if (err) {
-			console.error(err);
-			return;
-		}
-		total.users = JSON.parse(data).pagination.total;
-	});
+	const products = (total.products = JSON.parse(fs.readFileSync('./product.json', 'utf8')).pagination.total);
+	total.categories = JSON.parse(fs.readFileSync('./categories.json', 'utf8')).pagination.total;
+	total.users = JSON.parse(fs.readFileSync('./users.json', 'utf8')).pagination.total;
 	res.render('admin', { total: total });
-	// res.send('Got a PUT request at /user');
 });
 
 router.get('/products', (req, res) => {
-	fs.readFile('./product.json', 'utf8', (err, data) => {
+	fs.readFileSync('./product.json', 'utf8', (err, data) => {
 		if (err) {
 			console.error(err);
 			return;
@@ -51,7 +32,7 @@ router.get('/products', (req, res) => {
 });
 
 router.get('/userlist', (req, res) => {
-	fs.readFile('./users.json', 'utf8', (err, data) => {
+	fs.readFileSync('./users.json', 'utf8', (err, data) => {
 		if (err) {
 			console.error(err);
 			return;
@@ -68,7 +49,7 @@ router.get('/userlist', (req, res) => {
 });
 
 router.get('/categories', (req, res) => {
-	fs.readFile('./categories.json', 'utf8', (err, data) => {
+	fs.readFileSync('./categories.json', 'utf8', (err, data) => {
 		if (err) {
 			console.error(err);
 			return;
@@ -87,7 +68,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/product/:id', (req, res) => {
-	fs.readFile('./product.json', 'utf8', (err, data) => {
+	fs.readFileSync('./product.json', 'utf8', (err, data) => {
 		if (err) {
 			console.error(err);
 			return;
