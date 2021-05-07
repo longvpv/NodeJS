@@ -56,9 +56,11 @@ router.get('/products', async (req, res) => {
 router.get('/userlist', async (req, res) => {
 	let allUser = [];
 	if (req.query.searchText) {
-		const text = `/${req.query.searchText}/i`;
-		allUser = await User.find({ firstName: text });
-		console.log(allUser, text);
+		const text = req.query.searchText;
+		allUser = await User.find({
+			$or: [{ firstName: { $regex: text, $options: 'i' } }, { lastName: { $regex: text, $options: 'i' } }],
+		});
+		console.log(allUser);
 	} else {
 		allUser = await User.find({});
 	}

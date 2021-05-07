@@ -36,11 +36,9 @@ router.post('/createProduct', async (req, res) => {
 			data: `Validate fail, check form ${Object.keys(err.errors)} !`,
 		});
 	}
-	await Product.create({ _id: new mongoose.Types.ObjectId().toHexString(), ...req.body });
-	res.send({
-		statusCode: 200,
-		data: 'Create successfully',
-	});
+	let newId = new mongoose.Types.ObjectId().toHexString();
+	await Product.create({ _id: newId, ...req.body });
+	res.redirect(`/product/${newId}`);
 });
 
 router.post('/seedDatabase', async (req, res) => {
