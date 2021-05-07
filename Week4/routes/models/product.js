@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const SchemaTypes = mongoose.SchemaTypes;
 
 const ProductSchema = new Schema({
+	_id: SchemaTypes.String,
 	name: { type: String, required: true },
 	image: String,
 	thumbnail: String,

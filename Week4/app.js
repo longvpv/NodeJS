@@ -4,15 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+// const jwt = require('jsonwebtoken');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var apiRouter = require('./routes/api/productApi');
+const { requireAuth, checkCurrentUser } = require('./routes/auth/authMiddleware');
 
 var app = express();
 
-const { MONGO_URL = 'mongodb://admin:Abcd1234@localhost:27017/Long-database?authSource=admin' } = process.env;
+const { MONGO_URL = 'mongodb://admin:Abcd1234@localhost:27017/nodic-nodejs?authSource=admin' } = process.env;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,8 +26,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('*', checkCurrentUser);
 app.use('/', indexRouter);
-app.use('/admin', adminRouter);
+app.use('/admin', requireAuth, adminRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 
@@ -45,15 +48,16 @@ app.use(function (err, req, res, next) {
 	res.render('error');
 });
 
-app.start = () => {
+const initDB = () => {
 	mongoose
 		.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 		.then(() => {
-			debug('Database connect success');
+			console.log('Database connect success');
 		})
 		.catch((err) => {
-			debug('Database connection error:' + err);
+			console.log('Database connection error:' + err);
 		});
 };
+initDB();
 
 module.exports = app;

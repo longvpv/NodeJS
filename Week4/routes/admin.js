@@ -1,5 +1,4 @@
 var express = require('express');
-const { render } = require('../app');
 var router = express.Router();
 const Product = require('./models/product');
 /* GET users listing. */
