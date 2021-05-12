@@ -28,8 +28,8 @@ const checkCurrentUser = (req, res, next) => {
 				res.locals.user = null;
 				next();
 			} else {
-				let user = await UserLogin.findById(decodeToken._id);
-				res.locals.user = user;
+				let user = await UserLogin.findById(decodeToken.id);
+				res.locals.user = user._doc;
 				next();
 			}
 		});

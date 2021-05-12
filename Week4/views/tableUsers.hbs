@@ -69,11 +69,9 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const searchText = form.searchText.value
-            console.log(`/api/users?filter=${JSON.stringify({ keyword: searchText })}`)
             try {
                 const res = await fetch(`/userlist?filter=${JSON.stringify({ keyword: searchText })}`, {
                     method: 'GET',
-                    body: JSON.stringify({ keyword: searchText })
                     headers: { 'Content-Type': 'application/json' }
                 });
 
