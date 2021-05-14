@@ -4,14 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
-// const jwt = require('jsonwebtoken');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var apiRouter = require('./routes/api/productApi');
 const { requireAuth, checkCurrentUser } = require('./routes/auth/authMiddleware');
-
+const debug = require('debug')('app');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 var app = express();
 
 const { MONGO_URL = 'mongodb://admin:Abcd1234@localhost:27017/nodic-nodejs?authSource=admin' } = process.env;
@@ -24,6 +25,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(upload.single('avatar'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('*', checkCurrentUser);
@@ -59,5 +61,18 @@ const initDB = () => {
 		});
 };
 initDB();
+
+app.start = (PORT) => {
+	return new Promise((resolve, reject) => {
+		initDB();
+		const server = app.listen(PORT, (err) => {
+			if (err) {
+				return reject(err);
+			}
+			console.log('App started and listening on port', PORT);
+			resolve(server);
+		});
+	});
+};
 
 module.exports = app;

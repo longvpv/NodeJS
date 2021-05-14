@@ -26,7 +26,9 @@
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
-                            <tr>
+                            <tr>    
+                                <th>Action</th>
+                                <th>Avatar</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Date of birth</th>
@@ -40,8 +42,15 @@
                         </thead>
 
                         <tbody>
+                            <input id='fileid' type='file' onchange="uploadAvatar(this.files[0]);" accept="image/*" hidden/>
                             {{#each users }}
                             <tr>
+                                <td>
+                                    <button class="btn btn-info btn-sm uploadAvatar" id={{_id}}>
+                                        Upload avatar
+                                    </button>
+                                </td>
+                                <td>{{avatar}}</td>
                                 <td>{{firstName}}</td>
                                 <td>{{lastName}}</td>
                                 <td>{{dob}}</td>
@@ -65,7 +74,35 @@
 
     </div>
     <script>
+        let id = null
+        const uploadAvatar = async (file) => {
+          console.log(file, id)
+          const formData = new FormData()
+            formData.append('avatar', file)
+            formData.append('id', id)
+          try {
+            const res = await fetch(`/users/uploadPhoto`, {
+                    method: 'POST',
+                    //headers: { 'Content-Type': 'multipart/form-data' },
+                    body: formData
+                });
+          } catch (error) {
+            console.log(error)
+          }
+
+        }
         const form = document.querySelector('form');
+        const uploadButtonList = document.querySelectorAll('.uploadAvatar')
+        for (const button of uploadButtonList) {
+          button.addEventListener('click' , async (e) => {
+          e.preventDefault();
+          console.log('you click on add avatar', e.path[0].id)
+          id = e.path[0].id
+          let fileUploadElement = document.getElementById('fileid')
+          fileUploadElement.click()
+        })
+        }
+        
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const searchText = form.searchText.value

@@ -8,9 +8,9 @@
             <form>
                 <div class="row">
                     <div class="col-sm-12 col-md-6">
-                        <div class="dataTables_length" id="dataTable_length">
-                            Show
-                            <span><select name="data_length" aria-controls="dataTable"
+                        <div class="d-flex" id="dataTable_length">
+                            <span class="w-25">Show</span>
+                            <span class="w-75"><select name="data_length" aria-controls="dataTable"
                                     class="custom-select custom-select-sm form-control form-control-sm">
                                     <option value="2">2</option>
                                     <option value="5">5</option>
@@ -20,8 +20,8 @@
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6">
-                        <div id="dataTable_filter" class="dataTables_filter">Search text:
-                            <input type="search" class="form-control form-control-sm" placeholder=""
+                        <div id="dataTable_filter" class="dataTables_filter d-flex"><span class="w-25">Search text:</span>
+                            <input type="search" class="form-control form-control-sm w-75" placeholder=""
                                 aria-controls="dataTable" name="data_keyword">
                         </div>
                     </div>
@@ -79,7 +79,7 @@
     form.addEventListener('submit', async e => {
         e.preventDefault()
         try {
-            const res = await fetch(`/products?filter=${keyword: form.data_keyword.valu, dataLength: form.data_length.value}`, {
+            const res = await fetch(`/products?filter=${keyword: form.data_keyword.value, dataLength: form.data_length.value}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });

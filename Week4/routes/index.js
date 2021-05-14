@@ -48,19 +48,16 @@ router.get('/admin', async function (req, res) {
 	res.render('admin', { total: total });
 });
 
+//------------------------------------------------
+
 router.get('/products', async (req, res) => {
-	console.log(parseInt(req.query.data_length));
-	if (req.query.data_keyword) {
-		const result = await Product.find({ name: { $regex: req.query.data_keyword, $options: 'i' } }).limit(
-			parseInt(req.query.data_length)
-		);
-		return res.render('tableProduct', { products: result });
-	} else {
-		const result = await Product.find({}).limit(2);
-		return res.render('tableProduct', { products: result });
-	}
+	const result = await Product.find({ name: { $regex: req.query.data_keyword || '', $options: 'i' } }).limit(
+		parseInt(req.query.data_length) || 2
+	);
+	return res.render('tableProduct', { products: result });
 });
 
+//-----------------------------------------------------
 router.get('/userlist', async (req, res) => {
 	let allUser = [];
 	if (req.query.searchText) {

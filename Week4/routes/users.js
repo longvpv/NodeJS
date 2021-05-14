@@ -2,6 +2,7 @@ var express = require('express');
 const UserLogin = require('./models/userLogin');
 var router = express.Router();
 const jwt = require('jsonwebtoken');
+const User = require('./models/user');
 
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id, email) => {
@@ -64,6 +65,14 @@ router.post('/login', async (req, res) => {
 		const errors = handleError(err);
 		res.status(400).json({ errors });
 	}
+});
+
+router.post('/uploadPhoto', async (req, res) => {
+	const userDetails = req.body;
+	const avatarFile = req.file;
+	console.log(avatarFile);
+	const result = await User.updateOne({ _id: userDetails.id }, { avatar: avatarFile.path });
+	res.status(200).json({ amazing: 'Goodjob em' });
 });
 
 module.exports = router;

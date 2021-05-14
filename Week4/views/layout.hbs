@@ -70,9 +70,12 @@
     </ul>
 
     <div id="content-wrapper" class="d-flex flex-column">
+      {{#if user}}
       <div class="d-flex justify-content-center align-items-center">
         Welcome {{user.email}}
       </div>
+      {{/if}}
+      
 
       {{{body}}}
       <footer class="sticky-footer bg-white">
