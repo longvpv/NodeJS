@@ -51,7 +51,7 @@ app.use(function (err, req, res, next) {
 });
 
 const initDB = () => {
-	mongoose
+	return mongoose
 		.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 		.then(() => {
 			console.log('Database connect success');
@@ -60,11 +60,11 @@ const initDB = () => {
 			console.log('Database connection error:' + err);
 		});
 };
-initDB();
+const initDBStatus = initDB();
 
 app.start = (PORT) => {
-	return new Promise((resolve, reject) => {
-		initDB();
+	return new Promise(async (resolve, reject) => {
+		await initDBStatus;
 		const server = app.listen(PORT, (err) => {
 			if (err) {
 				return reject(err);

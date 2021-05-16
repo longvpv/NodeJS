@@ -6,17 +6,18 @@ let defaultUser = {
 	name: 'Long',
 };
 beforeAll(() => {
+	console.log(defaultUser);
 	return app
 		.start(3000, 'mongodb://admin:Abcd1234@localhost:27017/nodic-nodejs?authSource=admin')
 		.then((httpserver) => {
-			server = httpserver;
+			return (server = httpserver);
 		});
 });
 afterAll((done) => {
 	if (server) {
 		server.close();
 	}
-	done();
+	return done();
 });
 test('GET /', () => {
 	return request(app)

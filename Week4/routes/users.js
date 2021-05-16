@@ -72,7 +72,7 @@ router.post('/uploadPhoto', async (req, res) => {
 	const avatarFile = req.file;
 	console.log(avatarFile);
 	const result = await User.updateOne({ _id: userDetails.id }, { avatar: avatarFile.path });
-	res.status(200).json({ amazing: 'Goodjob em' });
+	res.status(200).json('Upload completed');
 });
 
 module.exports = router;
