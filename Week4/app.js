@@ -15,7 +15,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 var app = express();
 
-const { MONGO_URL = 'mongodb://admin:Abcd1234@localhost:27017/nodic-nodejs?authSource=admin' } = process.env;
+const { MONGO_URL } = process.env;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,10 +27,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(upload.single('avatar'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'public-images')));
 
 app.use('*', checkCurrentUser);
 app.use('/', indexRouter);
-app.use('/admin', requireAuth, adminRouter);
+// app.use('/admin', requireAuth, adminRouter);
+app.use('/admin', adminRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 

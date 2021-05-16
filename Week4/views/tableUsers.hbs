@@ -50,7 +50,7 @@
                                         Upload avatar
                                     </button>
                                 </td>
-                                <td>{{avatar}}</td>
+                                <td><img src={{avatar}}  width="75" height="75"></td>
                                 <td>{{firstName}}</td>
                                 <td>{{lastName}}</td>
                                 <td>{{dob}}</td>
@@ -76,16 +76,16 @@
     <script>
         let id = null
         const uploadAvatar = async (file) => {
-          console.log(file, id)
           const formData = new FormData()
             formData.append('avatar', file)
             formData.append('id', id)
           try {
             const res = await fetch(`/users/uploadPhoto`, {
                     method: 'POST',
-                    //headers: { 'Content-Type': 'multipart/form-data' },
                     body: formData
                 });
+            console.log(res)
+            if (res.status === 200) location.reload()
           } catch (error) {
             console.log(error)
           }
@@ -96,7 +96,6 @@
         for (const button of uploadButtonList) {
           button.addEventListener('click' , async (e) => {
           e.preventDefault();
-          console.log('you click on add avatar', e.path[0].id)
           id = e.path[0].id
           let fileUploadElement = document.getElementById('fileid')
           fileUploadElement.click()

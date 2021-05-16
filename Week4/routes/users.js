@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require('express');
 const UserLogin = require('./models/userLogin');
 var router = express.Router();
@@ -35,11 +36,6 @@ const handleError = (err) => {
 	return errors;
 };
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-	res.send('respond with a resource');
-});
-
 router.post('/signup', async (req, res) => {
 	const { email, password } = req.body;
 	try {
@@ -70,9 +66,14 @@ router.post('/login', async (req, res) => {
 router.post('/uploadPhoto', async (req, res) => {
 	const userDetails = req.body;
 	const avatarFile = req.file;
-	console.log(avatarFile);
-	const result = await User.updateOne({ _id: userDetails.id }, { avatar: avatarFile.path });
-	res.status(200).json('Upload completed');
+	const { originalname, path: filePath } = avatarFile;
+	const fs = require('fs');
+	fs.copyFileSync(filePath, `public-images/${userDetails.id + '-' + originalname}`);
+	await User.updateOne(
+		{ _id: userDetails.id },
+		{ avatar: `${req.headers.origin}/images/${userDetails.id + '-' + originalname}` }
+	);
+	res.status(200).json({ status: 'Update completed', statusCode: 200 });
 });
 
 module.exports = router;

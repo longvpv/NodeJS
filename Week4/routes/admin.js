@@ -1,9 +1,20 @@
 var express = require('express');
+const Category = require('./models/category');
 var router = express.Router();
 const Product = require('./models/product');
-/* GET users listing. */
-router.get('/login', function (req, res, next) {
-	res.render('userLogin');
+const User = require('./models/user');
+
+router.get('/', async function (req, res) {
+	let total = {
+		products: 100,
+		users: 10,
+		categories: 4,
+	};
+
+	total.products = await Product.countDocuments({});
+	total.categories = await Category.countDocuments({});
+	total.users = await User.countDocuments({});
+	res.render('admin', { total: total });
 });
 
 router.get('/getProduct', async (req, res, next) => {
